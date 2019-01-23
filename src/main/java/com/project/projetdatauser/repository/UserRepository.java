@@ -5,14 +5,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.List;
 
-/*
-public interface UserRepository extends CrudRepository<User, String> {
-
-}
-*/
-
 public interface UserRepository extends MongoRepository<User, String> {
 
+    public User findOneById(String id);
     public User findByFirstName(String firstName);
     public List<User> findAll ();
 

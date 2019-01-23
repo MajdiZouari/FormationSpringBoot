@@ -1,16 +1,37 @@
 package com.project.projetdatauser.model;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "users")
 public class User {
 
-    public String country;
-    public String civility;
-    public String firstName;
-    public String firstName2;
-    public String lastName;
-    public String lastName2;
-    public String dateOfBirth;
-    public Adresse adresse;
-    public Email email;
+    @Id
+    private String id;
+    private String country;
+    private String civility;
+    private String firstName;
+    private String firstName2;
+    private String lastName;
+    private String lastName2;
+    private String dateOfBirth;
+    private Adresse adresse;
+
+    public User(){
+
+    }
+
+    public User(String id, String country, String civility, String firstName, String firstName2, String lastName, String lastName2, String dateOfBirth, Adresse adresse, Email email) {
+        this.country = country;
+        this.civility = civility;
+        this.firstName = firstName;
+        this.firstName2 = firstName2;
+        this.lastName = lastName;
+        this.lastName2 = lastName2;
+        this.dateOfBirth = dateOfBirth;
+        this.adresse = adresse;
+        this.email = email;
+    }
 
     @Override
     public String toString() {
@@ -27,15 +48,85 @@ public class User {
                 '}';
     }
 
-    public User(String country, String civility, String firstName, String firstName2, String lastName, String lastName2, String dateOfBirth, Adresse adresse, Email email) {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
         this.country = country;
+    }
+
+    public String getCivility() {
+        return civility;
+    }
+
+    public void setCivility(String civility) {
         this.civility = civility;
+    }
+
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
         this.firstName = firstName;
+    }
+
+    public String getFirstName2() {
+        return firstName2;
+    }
+
+    public void setFirstName2(String firstName2) {
         this.firstName2 = firstName2;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastName) {
         this.lastName = lastName;
+    }
+
+    public String getLastName2() {
+        return lastName2;
+    }
+
+    public void setLastName2(String lastName2) {
         this.lastName2 = lastName2;
+    }
+
+    public String getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(String dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
+    }
+
+    public Adresse getAdresse() {
+        return adresse;
+    }
+
+    public void setAdresse(Adresse adresse) {
         this.adresse = adresse;
+    }
+
+    public Email getEmail() {
+        return email;
+    }
+
+    public void setEmail(Email email) {
         this.email = email;
     }
+
+    private Email email;
 }
