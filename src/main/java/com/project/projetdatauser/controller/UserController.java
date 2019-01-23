@@ -20,7 +20,7 @@ public class UserController {
 
     @RequestMapping(value = "/{id}")
     public User read(@PathVariable String id) {
-        return userRepository.findOne(id);
+        return userRepository.findOneById(id);
     }
 
     @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
@@ -30,6 +30,6 @@ public class UserController {
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable String id) {
-        userRepository.delete(id);
+        userRepository.deleteById(id);
     }
 }

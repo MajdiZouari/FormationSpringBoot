@@ -31,7 +31,5 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	compile 'org.springframework.boot:spring-boot-starter-data-mongodb'
-	compile group: 'org.springframework.data', name: 'spring-data-jpa', version: '1.0.0.RELEASE'
-
+	compile 'org.springframework.data:spring-data-mongodb'
 }
