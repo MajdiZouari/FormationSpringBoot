@@ -1,7 +1,10 @@
 package com.project.projetdatauser.model;
 
+import javax.validation.constraints.Min;
+
 public class Email {
 
+    @javax.validation.constraints.Email(message = "Please provide valid email address")
     private String emailValue;
     private boolean validityFlag;
 

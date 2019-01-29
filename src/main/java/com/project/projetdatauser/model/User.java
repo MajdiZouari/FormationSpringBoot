@@ -3,6 +3,8 @@ package com.project.projetdatauser.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotNull;
+
 @Document(collection = "users")
 public class User {
 
@@ -10,8 +12,10 @@ public class User {
     private String id;
     private String country;
     private String civility;
+    @NotNull(message = "Please provide first Name")
     private String firstName;
     private String firstName2;
+    @NotNull(message = "Please provide last Name")
     private String lastName;
     private String lastName2;
     private String dateOfBirth;
