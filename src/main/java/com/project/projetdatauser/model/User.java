@@ -20,12 +20,14 @@ public class User {
     private String lastName2;
     private String dateOfBirth;
     private Adresse adresse;
+    private Email email;
 
     public User(){
 
     }
 
     public User(String id, String country, String civility, String firstName, String firstName2, String lastName, String lastName2, String dateOfBirth, Adresse adresse, Email email) {
+
         this.country = country;
         this.civility = civility;
         this.firstName = firstName;
@@ -131,6 +133,4 @@ public class User {
     public void setEmail(Email email) {
         this.email = email;
     }
-
-    private Email email;
 }

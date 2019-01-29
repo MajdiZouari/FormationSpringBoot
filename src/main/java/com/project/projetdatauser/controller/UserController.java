@@ -5,6 +5,7 @@ import com.project.projetdatauser.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -18,7 +19,9 @@ public class UserController {
     private UserRepository userRepository;
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void create(@Valid @RequestBody User user) {
+    public void create(@RequestBody @Valid User user, BindingResult result) {
+        if (result.hasErrors())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User To Create Infos Not Good");
         userRepository.save(user);
     }
 
@@ -30,7 +33,9 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@Valid @RequestBody User user) {
+    public void update(@Valid @RequestBody User user, BindingResult result) {
+        if (result.hasErrors())
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User To Update Infos Not Good");
         userRepository.save(user);
     }
 
