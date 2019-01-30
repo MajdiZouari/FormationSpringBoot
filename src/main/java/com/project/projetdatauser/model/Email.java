@@ -1,7 +1,5 @@
 package com.project.projetdatauser.model;
 
-import org.springframework.validation.BindingResult;
-
 import javax.validation.constraints.NotNull;
 
 public class Email {
@@ -15,7 +13,7 @@ public class Email {
 
     }
 
-    public Email(String emailValue, boolean validityFlag, BindingResult result) {
+    public Email(String emailValue, boolean validityFlag) {
         this.emailValue = emailValue;
         this.validityFlag = validityFlag;
     }

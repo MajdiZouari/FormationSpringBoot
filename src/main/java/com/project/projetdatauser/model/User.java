@@ -3,6 +3,7 @@ package com.project.projetdatauser.model;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 @Document(collection = "users")
@@ -20,6 +21,8 @@ public class User {
     private String lastName2;
     private String dateOfBirth;
     private Adresse adresse;
+    @NotNull(message = "Please provide Email")
+    @Valid
     private Email email;
 
     public User(){
