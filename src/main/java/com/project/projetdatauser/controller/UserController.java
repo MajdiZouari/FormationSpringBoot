@@ -36,6 +36,7 @@ public class UserController {
     public void update(@Valid @RequestBody User user, BindingResult result) {
         if (result.hasErrors())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User To Update Infos Not Good");
+        userRepository.deleteById(user.getId());
         userRepository.save(user);
     }
 
