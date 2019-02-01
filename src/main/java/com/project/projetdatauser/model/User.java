@@ -11,6 +11,10 @@ public class User {
 
     @Id
     private String id;
+    @NotNull
+    private String login;
+    @NotNull
+    private String pwd;
     private String country;
     private String civility;
     @NotNull(message = "Please provide first Name")
@@ -59,6 +63,22 @@ public class User {
 
     public String getId() {
         return id;
+    }
+
+    public String getLogin() {
+        return login;
+    }
+
+    public void setLogin(String login) {
+        this.login = login;
+    }
+
+    public String getPwd() {
+        return pwd;
+    }
+
+    public void setPwd(String pwd) {
+        this.pwd = pwd;
     }
 
     public void setId(String id) {

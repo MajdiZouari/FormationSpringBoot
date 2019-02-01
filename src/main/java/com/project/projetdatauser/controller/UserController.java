@@ -8,6 +8,7 @@ import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.Valid;
 
@@ -22,6 +23,8 @@ public class UserController {
     public void create(@RequestBody @Valid User user, BindingResult result) {
         if (result.hasErrors())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User To Create Infos Not Good");
+        String encodedPwd = new BCryptPasswordEncoder().encode(user.getPwd() );
+        user.setPwd(encodedPwd);
         userRepository.save(user);
     }
 

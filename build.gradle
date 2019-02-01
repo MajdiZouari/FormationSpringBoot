@@ -32,4 +32,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compile 'org.springframework.data:spring-data-mongodb'
+	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-crypto
+	compile group: 'org.springframework.security', name: 'spring-security-crypto', version: '3.1.0.RELEASE'
+
 }
