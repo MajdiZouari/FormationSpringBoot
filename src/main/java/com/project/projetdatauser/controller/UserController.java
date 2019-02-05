@@ -2,13 +2,13 @@ package com.project.projetdatauser.controller;
 
 import com.project.projetdatauser.model.User;
 import com.project.projetdatauser.repository.UserRepository;
+import com.project.projetdatauser.services.PwdEncodingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import javax.validation.Valid;
 
@@ -19,12 +19,14 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
 
+    private PwdEncodingService pwdEncodingService;
+
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void create(@RequestBody @Valid User user, BindingResult result) {
         if (result.hasErrors())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User To Create Infos Not Good");
-        String encodedPwd = new BCryptPasswordEncoder().encode(user.getPwd() );
-        user.setPwd(encodedPwd);
+
+        user.setPwd(pwdEncodingService.PwdEncoding(user.getPwd()));
         userRepository.save(user);
     }
 
