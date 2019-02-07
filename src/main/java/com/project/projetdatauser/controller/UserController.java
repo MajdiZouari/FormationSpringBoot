@@ -54,11 +54,8 @@ public class UserController {
 
     @RequestMapping(value = "/authentificate", method = RequestMethod.POST)
     public  @ResponseBody User authentificate(@RequestParam String login, @RequestParam String pwd)  {
-        User usr = userRepository.findByLogin(login);
+        User usr = userRepository.findByLoginAndPwd(login,pwdEncodingService.PwdEncoding(pwd));
         if (usr == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found To Authentificate");
-        System.out.println("usr.getPwd() = " +usr.getPwd());
-        if (!(pwdEncodingService.PwdEncoding(pwd)).equals( usr.getPwd()))
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password");
-       return usr;
+        return usr;
     }
 }
