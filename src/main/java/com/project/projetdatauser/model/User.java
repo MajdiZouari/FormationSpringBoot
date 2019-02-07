@@ -33,8 +33,9 @@ public class User {
 
     }
 
-    public User(String id, String country, String civility, String firstName, String firstName2, String lastName, String lastName2, String dateOfBirth, Adresse adresse, Email email) {
-
+    public User(String id, String login, String pwd, String country, String civility, String firstName, String firstName2, String lastName, String lastName2, String dateOfBirth, Adresse adresse, Email email) {
+        this.login = login;
+        this.pwd = pwd;
         this.country = country;
         this.civility = civility;
         this.firstName = firstName;

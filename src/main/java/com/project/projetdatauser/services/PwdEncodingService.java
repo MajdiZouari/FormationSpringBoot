@@ -1,7 +1,10 @@
 package com.project.projetdatauser.services;
 
+import org.springframework.stereotype.Service;
+
 import java.security.MessageDigest;
 
+@Service
 public class PwdEncodingService {
 
     public String PwdEncoding(String pwd){
@@ -16,7 +19,6 @@ public class PwdEncodingService {
                 hexString.append(hex);
             }
             return hexString.toString();
-
         } catch(Exception ex){
             throw new RuntimeException(ex);
         }

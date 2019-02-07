@@ -18,15 +18,15 @@ public class UserController {
 
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
     private PwdEncodingService pwdEncodingService;
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void create(@RequestBody @Valid User user, BindingResult result) {
         if (result.hasErrors())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User To Create Infos Not Good");
-
-        user.setPwd(pwdEncodingService.PwdEncoding(user.getPwd()));
+        String encodedPwdSha256 = pwdEncodingService.PwdEncoding( user.getPwd());
+        user.setPwd(encodedPwdSha256);
         userRepository.save(user);
     }
 
@@ -50,5 +50,15 @@ public class UserController {
         User usr = userRepository.findOneById(id);
         if (usr == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found To Delete");
         userRepository.deleteById(id);
+    }
+
+    @RequestMapping(value = "/authentificate", method = RequestMethod.POST)
+    public  @ResponseBody User authentificate(@RequestParam String login, @RequestParam String pwd)  {
+        User usr = userRepository.findByLogin(login);
+        if (usr == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found To Authentificate");
+        System.out.println("usr.getPwd() = " +usr.getPwd());
+        if (!(pwdEncodingService.PwdEncoding(pwd)).equals( usr.getPwd()))
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Wrong password");
+       return usr;
     }
 }
