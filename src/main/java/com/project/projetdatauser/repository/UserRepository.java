@@ -9,7 +9,7 @@ public interface UserRepository extends MongoRepository<User, String> {
 
     public User findOneById(String id);
     public User findByFirstName(String firstName);
-    public List<User> findAll ();
+    public List<User> findAll();
     public void deleteById(String id);
     public User findByLogin(String login);
     public User findByLoginAndPwd(String login, String pwd);

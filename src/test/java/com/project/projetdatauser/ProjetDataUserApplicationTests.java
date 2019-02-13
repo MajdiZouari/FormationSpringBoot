@@ -1,4 +1,4 @@
-/*
+
 package com.project.projetdatauser;
 
 import org.junit.Test;
@@ -15,4 +15,4 @@ public class ProjetDataUserApplicationTests {
 	}
 
 }
-*/
+

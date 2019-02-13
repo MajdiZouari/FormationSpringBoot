@@ -1,8 +1,7 @@
 package com.project.projetdatauser.controller;
 
 import com.project.projetdatauser.model.User;
-import com.project.projetdatauser.repository.UserRepository;
-import com.project.projetdatauser.services.PwdEncodingService;
+import com.project.projetdatauser.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -17,22 +16,18 @@ import javax.validation.Valid;
 public class UserController {
 
     @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private PwdEncodingService pwdEncodingService;
+    private UserService userService;
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public void create(@RequestBody @Valid User user, BindingResult result) {
         if (result.hasErrors())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User To Create Infos Not Good");
-        String encodedPwdSha256 = pwdEncodingService.PwdEncoding( user.getPwd());
-        user.setPwd(encodedPwdSha256);
-        userRepository.save(user);
+        userService.createUser(user);
     }
 
     @GetMapping(value = "/{id}")
     public User read(@PathVariable String id)  {
-        User usr = userRepository.findOneById(id);
+        User usr = userService.getUserById(id);
         if (usr == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found To Read");
         return usr;
     }
@@ -41,20 +36,19 @@ public class UserController {
     public void update(@Valid @RequestBody User user, BindingResult result) {
         if (result.hasErrors())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User To Update Infos Not Good");
-        userRepository.deleteById(user.getId());
-        userRepository.save(user);
+        userService.updateUser(user);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void delete(@PathVariable String id) {
-        User usr = userRepository.findOneById(id);
+        User usr = userService.getUserById(id);
         if (usr == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found To Delete");
-        userRepository.deleteById(id);
+        userService.deleteUserById(id);
     }
 
     @RequestMapping(value = "/authentificate", method = RequestMethod.POST)
     public  @ResponseBody User authentificate(@RequestParam String login, @RequestParam String pwd)  {
-        User usr = userRepository.findByLoginAndPwd(login,pwdEncodingService.PwdEncoding(pwd));
+        User usr = userService.authentificate(login,pwd);
         if (usr == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found To Authentificate");
         return usr;
     }
