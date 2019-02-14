@@ -35,26 +35,26 @@ public class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    private static User usr;
-    private static User usrInvalid;
+    private static User usr, usrInvalid;
+    private static Email em, emInvalid;
+    private static Adresse adr;
 
     @BeforeClass
     public static void setUpBeforeClass(){
         /*
         * *  J'ai vu dans des exemples, je dois avoir ici mes MockMvcBuilders
         * */
-        Adresse adr = new Adresse("122 avenue du Général Leclerc","BOULOGNE BILLANCOURT","IDF","92100","FR");
-        Email em = new Email("jean.dupont@yopmail.com", true);
-        Email emInvalid = new Email("aaaaaaaaaa",true);
+        adr = new Adresse("122 avenue du Général Leclerc","BOULOGNE BILLANCOURT","IDF","92100","FR");
+        em = new Email("jean.dupont@yopmail.com", true);
+        emInvalid = new Email("aaaaaaaaaa",true);
         usr = new User("majdi", "majdi","FR","1","Jean","Pierre","Dupont","Martin","1980-06-28", adr, em);
         usrInvalid = new User("majdi", "majdi","FR","1","Jean","Pierre","Dupont","Martin","1980-06-28", adr, emInvalid);
     }
 
     @Before
-    public void setUp_should_success_create_user(){
-        Adresse adr = new Adresse("122 avenue du Général Leclerc","BOULOGNE BILLANCOURT","IDF","92100","FR");
-        Email em = new Email("jean.dupont@yopmail.com", true);
+    public void setup() {
         usr = new User("majdi", "majdi","FR","1","Jean","Pierre","Dupont","Martin","1980-06-28", adr, em);
+        userService.createUser(usr);
     }
 
     @Test
@@ -63,6 +63,7 @@ public class UserControllerTest {
         //Then
         this.mockMvc.perform(post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
+                .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(usr)))
                 .andExpect(status().isOk());
     }
@@ -100,13 +101,6 @@ public class UserControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @Before
-    public void setUp_should_success_update_user(){
-        Adresse adr = new Adresse("122 avenue du Général Leclerc","BOULOGNE BILLANCOURT","IDF","92100","FR");
-        Email em = new Email("jean.dupont@yopmail.com", true);
-        usr = new User("majdi", "majdi","FR","1","Jean","Pierre","Dupont","Martin","1980-06-28", adr, em);
-    }
-
     @Test
     public void should_success_update_user() throws Exception{
         //Given
@@ -137,11 +131,11 @@ public class UserControllerTest {
         //Given
         userService.createUser(usr);
         //Then
-        this.mockMvc.perform(delete("/api/v1/users/{id}" , usr.getId() )
+        this.mockMvc.perform(delete("/api/v1/users/{id}" , usr.getId())
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isMethodNotAllowed());
-
+                .andExpect(status().isOk());
     }
+
     @Test
     public void should_fail_delete_user() throws Exception{
         //Given
@@ -149,7 +143,6 @@ public class UserControllerTest {
         this.mockMvc.perform(delete("/api/v1/users/123" )
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
-
     }
 
     @Test
@@ -174,5 +167,4 @@ public class UserControllerTest {
                 .param("pwd", "123"))
                 .andExpect(status().isNotFound());
     }
-
 }
