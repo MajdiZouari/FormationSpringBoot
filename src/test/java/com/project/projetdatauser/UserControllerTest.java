@@ -10,7 +10,6 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,8 +22,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.Mockito.*;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
@@ -39,9 +38,6 @@ public class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @InjectMocks
-    private UserController userController;
-
     private static User usr, usrInvalid;
     private static Email em, emInvalid;
     private static Adresse adr;
@@ -50,7 +46,7 @@ public class UserControllerTest {
     @BeforeClass
     public static void setUpBeforeClass(){
         /*
-        * *  J'ai vu dans des exemples, je dois avoir ici mes MockMvcBuilders
+        * *  J'ai vu dans des exemples, je dois avoir ici mes MockMvcBuilders, standalonSetup(...)
         * */
         adr = new Adresse("122 avenue du Général Leclerc","BOULOGNE BILLANCOURT","IDF","92100","FR");
         em = new Email("jean.dupont@yopmail.com", true);
@@ -69,13 +65,14 @@ public class UserControllerTest {
     @Test
     public void should_success_create_user() throws Exception{
         //Given
-
+        Mockito.when(userService.createUser(usr)).thenReturn(id);
         //Then
         this.mockMvc.perform(post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
-                .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(usr)))
                 .andExpect(status().isOk());
+                // Not Working : Je dois comparer l'id retourné avec l'id attendu "0000"
+                //.andExpect(content().string("0000"));
     }
 
     @Test
@@ -87,7 +84,11 @@ public class UserControllerTest {
                 .content(objectMapper.writeValueAsString(usrInvalid)))
                 .andExpect(status().isBadRequest());
     }
-
+    /**
+     * Verify that the HTTP status code is 200.
+     * Verify that the findById() method of the UserService is invoked exactly once.
+     * Verify that after the response, no more interactions are made to the UserService
+     * */
     @Test
     public void should_success_get_user() throws Exception{
         //Given
@@ -95,7 +96,8 @@ public class UserControllerTest {
         //Then
         this.mockMvc.perform(get("/api/v1/users/{id}", id))
                 .andExpect(status().isOk())
-                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$.id").value("0000"));
         verify(userService, times(1)).getUserById(id);
         verifyNoMoreInteractions(userService);
     }
