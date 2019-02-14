@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
 import org.mockito.Mockito;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.Mockito.*;
+import static org.mockito.internal.verification.VerificationModeFactory.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -35,9 +39,13 @@ public class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @InjectMocks
+    private UserController userController;
+
     private static User usr, usrInvalid;
     private static Email em, emInvalid;
     private static Adresse adr;
+    private static String id;
 
     @BeforeClass
     public static void setUpBeforeClass(){
@@ -54,12 +62,14 @@ public class UserControllerTest {
     @Before
     public void setup() {
         usr = new User("majdi", "majdi","FR","1","Jean","Pierre","Dupont","Martin","1980-06-28", adr, em);
-        userService.createUser(usr);
+        id = "0000";
+        usr.setId(id);
     }
 
     @Test
     public void should_success_create_user() throws Exception{
         //Given
+
         //Then
         this.mockMvc.perform(post("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -81,15 +91,13 @@ public class UserControllerTest {
     @Test
     public void should_success_get_user() throws Exception{
         //Given
-        usr.setId("0000");
-
-        Mockito.when(
-                userService.getUserById(
-                        Mockito.anyString())).thenReturn(usr);
+        Mockito.when(userService.getUserById("0000")).thenReturn(usr);
         //Then
-        this.mockMvc.perform(get("/api/v1/users/"+usr.getId())
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk());
+        this.mockMvc.perform(get("/api/v1/users/{id}", id))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE));
+        verify(userService, times(1)).getUserById(id);
+        verifyNoMoreInteractions(userService);
     }
 
     @Test
@@ -123,17 +131,18 @@ public class UserControllerTest {
                 .andExpect(status().isBadRequest());
     }
 
-    /*
-     * *  Not Working with status().isOk()
-     * */
     @Test
     public void should_success_delete_user() throws Exception{
         //Given
-        userService.createUser(usr);
+        when(userService.getUserById(id)).thenReturn(usr);
+        doNothing().when(userService).deleteUserById(usr.getId());
         //Then
-        this.mockMvc.perform(delete("/api/v1/users/{id}" , usr.getId())
+        this.mockMvc.perform(delete("/api/v1/users/{id}" , id)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+        verify(userService, times(1)).getUserById(usr.getId());
+        verify(userService, times(1)).deleteUserById(usr.getId());
+        verifyNoMoreInteractions(userService);
     }
 
     @Test
@@ -148,7 +157,7 @@ public class UserControllerTest {
     @Test
     public void should_success_authentificate_user() throws Exception{
         //Given
-        Mockito.when(
+        when(
                 userService.authentificate(
                         Mockito.anyString(),Mockito.anyString())).thenReturn(usr);
         //Then

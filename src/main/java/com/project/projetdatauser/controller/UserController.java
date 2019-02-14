@@ -19,10 +19,10 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void create(@RequestBody @Valid User user, BindingResult result) {
+    public String create(@RequestBody @Valid User user, BindingResult result) {
         if (result.hasErrors())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User To Create Infos Not Good");
-        userService.createUser(user);
+        return userService.createUser(user);
     }
 
     @GetMapping(value = "/{id}")

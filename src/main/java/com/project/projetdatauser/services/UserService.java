@@ -31,10 +31,11 @@ public class UserService {
         }
     }
 
-    public void createUser(User user){
+    public String createUser(User user){
         String encodedPwdSha256 = SHA256PwdEncoding(user.getPwd());
         user.setPwd(encodedPwdSha256);
         userRepository.save(user);
+        return user.getId();
     }
 
     public void updateUser(User user){
