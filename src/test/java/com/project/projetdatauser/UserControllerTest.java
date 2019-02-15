@@ -15,10 +15,17 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
+import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.*;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -67,12 +74,16 @@ public class UserControllerTest {
         //Given
         Mockito.when(userService.createUser(usr)).thenReturn(id);
         //Then
-        this.mockMvc.perform(post("/api/v1/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(usr)))
-                .andExpect(status().isOk());
-                // Not Working : Je dois comparer l'id retourné avec l'id attendu "0000"
-                //.andExpect(content().string("0000"));
+        RequestBuilder requestBuilder = MockMvcRequestBuilders
+                .post("/api/v1/users")
+                .accept(MediaType.APPLICATION_JSON).content(objectMapper.writeValueAsString(usr))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        MvcResult result = mockMvc.perform(requestBuilder).andReturn();
+        MockHttpServletResponse response = result.getResponse();
+        assertEquals(HttpStatus.CREATED.value(), response.getStatus());
+        assertEquals("http://localhost/api/v1/users/" + id,
+                response.getHeader(HttpHeaders.LOCATION));
     }
 
     @Test
@@ -166,7 +177,9 @@ public class UserControllerTest {
         this.mockMvc.perform(post("/api/v1/users/authentificate")
                 .param("login", usr.getLogin())
                 .param("pwd", usr.getPwd()))
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON_UTF8_VALUE))
+                .andExpect(jsonPath("$.login").value(usr.getLogin()));
     }
 
     @Test

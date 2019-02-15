@@ -5,11 +5,14 @@ import com.project.projetdatauser.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -19,10 +22,13 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public String create(@RequestBody @Valid User user, BindingResult result) {
+    public ResponseEntity <Void> create(@RequestBody @Valid User user, BindingResult result) {
         if (result.hasErrors())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User To Create Infos Not Good");
-        return userService.createUser(user);
+        userService.createUser(user);
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path(
+                "/{id}").buildAndExpand(user.getId()).toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @GetMapping(value = "/{id}")
