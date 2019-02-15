@@ -39,8 +39,21 @@ public class UserService {
     }
 
     public void updateUser(User user){
-        userRepository.deleteById(user.getId());
-        userRepository.save(user);
+        userRepository.findById(user.getId())
+                .map(usr -> {
+                    usr.setLogin(user.getLogin());
+                    usr.setPwd(user.getPwd());
+                    usr.setCountry(user.getCountry());
+                    usr.setCivility(user.getCivility());
+                    usr.setFirstName(user.getFirstName());
+                    usr.setFirstName2(user.getFirstName2());
+                    usr.setLastName(user.getLastName());
+                    usr.setLastName2(user.getLastName2());
+                    usr.setDateOfBirth(user.getDateOfBirth());
+                    usr.setAdresse(user.getAdresse());
+                    usr.setEmail(user.getEmail());
+                    return userRepository.save(usr);
+                });
     }
 
     public User getUserById(String id){

@@ -130,6 +130,7 @@ public class UserControllerTest {
         this.mockMvc.perform(put("/api/v1/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(usr)))
+                .andExpect(jsonPath("$.firstName").value("updateFirstName"))
                 .andExpect(status().isOk());
     }
 

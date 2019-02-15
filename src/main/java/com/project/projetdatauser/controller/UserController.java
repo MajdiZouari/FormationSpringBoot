@@ -32,30 +32,32 @@ public class UserController {
     }
 
     @GetMapping(value = "/{id}")
-    public User read(@PathVariable String id)  {
+    public ResponseEntity <User> read(@PathVariable String id)  {
         User usr = userService.getUserById(id);
         if (usr == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found To Read");
-        return usr;
+        return new ResponseEntity<User>(usr, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.PUT, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void update(@Valid @RequestBody User user, BindingResult result) {
+    public ResponseEntity <User> update(@Valid @RequestBody User user, BindingResult result) {
         if (result.hasErrors())
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User To Update Infos Not Good");
         userService.updateUser(user);
+        return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
-    public void delete(@PathVariable String id) {
+    public ResponseEntity<Void> delete(@PathVariable String id) {
         User usr = userService.getUserById(id);
         if (usr == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found To Delete");
         userService.deleteUserById(id);
+        return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/authentificate", method = RequestMethod.POST)
-    public  @ResponseBody User authentificate(@RequestParam String login, @RequestParam String pwd)  {
+    public  ResponseEntity <User> authentificate(@RequestParam String login, @RequestParam String pwd)  {
         User usr = userService.authentificate(login,pwd);
         if (usr == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found To Authentificate");
-        return usr;
+        return new ResponseEntity<User>(usr, HttpStatus.OK);
     }
 }
