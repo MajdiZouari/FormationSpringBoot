@@ -52,8 +52,8 @@ public class UserControllerTest {
 
     @BeforeClass
     public static void setUpBeforeClass(){
-        /*
-        * *  J'ai vu dans des exemples, je dois avoir ici mes MockMvcBuilders, standalonSetup(...)
+        /**
+        * J'ai vu dans des exemples, je dois avoir ici mes MockMvcBuilders, standalonSetup(...)
         * */
         adr = new Adresse("122 avenue du Général Leclerc","BOULOGNE BILLANCOURT","IDF","92100","FR");
         em = new Email("jean.dupont@yopmail.com", true);
