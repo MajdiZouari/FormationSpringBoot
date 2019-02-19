@@ -13,8 +13,9 @@ public class LinkService {
     @Autowired
     private LinkRepository linkRepository;
 
-    public void addLinkToUser(Link link){
+    public String addLinkToUser(Link link){
         linkRepository.save(link);
+        return  link.getLinkId();
     }
 
     public Link getLinkById(String linkId){
@@ -23,6 +24,10 @@ public class LinkService {
 
     public List<Link> getAllLinksByUserId (String userId){
         return linkRepository.findAllByUserId(userId);
+    }
+
+    public void deleteAll(){
+        linkRepository.deleteAll();
     }
 
 }

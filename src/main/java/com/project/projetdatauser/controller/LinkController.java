@@ -1,6 +1,5 @@
 package com.project.projetdatauser.controller;
 
-
 import com.project.projetdatauser.model.Link;
 import com.project.projetdatauser.services.LinkService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,7 +41,7 @@ public class LinkController {
     @GetMapping(value = "/{linkId}")
     public ResponseEntity <Link> getLinkById(@PathVariable String linkId){
         Link link = linkService.getLinkById(linkId);
-        if(link == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Link Not Found To Read");
+        if(link == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Link Not Found");
         return new ResponseEntity(link,HttpStatus.OK);
     }
 
