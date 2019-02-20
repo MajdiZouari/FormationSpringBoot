@@ -62,6 +62,7 @@ public class LinkControllerTest {
         given()
                 .port(port)
                 .contentType("application/json")
+                //.content(objectMapper.writeValueAsString(link)))
                 .body(link)
                 .when().post(baseURI).then()
                 .statusCode(201);
@@ -101,11 +102,15 @@ public class LinkControllerTest {
 
     @Test
     public void should_success_getLinkById(){
-        given()
+        Link result = given()
                 .port(port).when().get("/{idLink1}", idLink1)
                 .then().statusCode(200)
                 .assertThat()
-                .body("linkId", equalTo(idLink1));
+                .body("linkId", equalTo(idLink1))
+                .extract().as(Link.class);
+
+        assertThat(result.getLink()).isEqualTo(link1.getLink());
+        assertThat(result).isEqualToComparingFieldByFieldRecursively(link1);
     }
 
     @Test
