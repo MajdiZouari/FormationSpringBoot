@@ -53,6 +53,11 @@ public class LinkControllerTest {
 
     @Test
     public void should_success_addLinkToUser(){
+        /**
+         * Je dois pouvoir récupérer dans le header la variable location que j'envoie à la création
+         * Et ensuite examiner le contenu avec les assertThat de AssertJ
+         * Je n'ai pas encore trouvé la bonne syntaxe
+         */
         Map<String,String> link = new HashMap<>();
         link.put("link", "link");
         link.put("shortLink", "shortLink");
@@ -64,7 +69,9 @@ public class LinkControllerTest {
                 .contentType("application/json")
                 //.content(objectMapper.writeValueAsString(link)))
                 .body(link)
-                .when().post(baseURI).then()
+        .when()
+                .post(baseURI)
+        .then()
                 .statusCode(201);
     }
 
@@ -78,15 +85,25 @@ public class LinkControllerTest {
                 .port(port)
                 .contentType("application/json")
                 .body(link)
-                .when().post(baseURI).then()
+        .when()
+                .post(baseURI)
+        .then()
                 .statusCode(400);
     }
 
     @Test
     public void should_success_getAllLinksByUserId(){
+        /**
+         * Je dois pouvoir récupérer une liste de links que retourne mon Rest-assured
+         * Et ensuite examiner le contenu avec les assertThat de AssertJ
+         * Je n'ai pas encore trouvé la bonne syntaxe
+         */
         given()
-                .port(port).when().get("/user/userId")
-                .then().statusCode(200)
+                .port(port)
+        .when()
+                .get("/user/userId")
+        .then()
+                .statusCode(200)
                 .assertThat()
                 .body("[0].linkId", equalTo(idLink1))
                 .body("[1].linkId", equalTo(idLink2));
@@ -96,18 +113,28 @@ public class LinkControllerTest {
     public void should_fail_getAllLinksByUserId(){
         linkService.deleteAll();
         given()
-                .port(port).when().get("/user/userId")
-                .then().statusCode(404);
+                .port(port)
+        .when()
+                .get("/user/userId")
+        .then()
+                .statusCode(404);
     }
 
     @Test
     public void should_success_getLinkById(){
-        Link result = given()
-                .port(port).when().get("/{idLink1}", idLink1)
-                .then().statusCode(200)
-                .assertThat()
-                .body("linkId", equalTo(idLink1))
-                .extract().as(Link.class);
+        /**
+         * Ici j'ai réussi à le faire
+         */
+        Link result =
+                given()
+                    .port(port)
+                .when()
+                    .get("/{idLink1}", idLink1)
+                .then()
+                    .statusCode(200)
+                    .assertThat()
+                    .body("linkId", equalTo(idLink1))
+                    .extract().as(Link.class);
 
         assertThat(result.getLink()).isEqualTo(link1.getLink());
         assertThat(result).isEqualToComparingFieldByFieldRecursively(link1);
@@ -116,7 +143,10 @@ public class LinkControllerTest {
     @Test
     public void should_fail_getLinkById(){
         given()
-                .port(port).when().get("/wrongLink")
-                .then().statusCode(404);
+                .port(port)
+        .when()
+                .get("/wrongLink")
+        .then()
+                .statusCode(404);
     }
 }
