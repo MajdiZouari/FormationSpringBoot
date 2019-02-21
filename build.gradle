@@ -34,7 +34,7 @@ dependencies {
 
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compile 'org.springframework.data:spring-data-mongodb'
-	testCompile 'com.jayway.restassured:rest-assured:2.5.0'
+	testCompile group: 'com.jayway.restassured', name: 'rest-assured', version: '2.9.0'
 	testCompile("org.assertj:assertj-core:3.11.1")
-	//testCompile 	group: 'com.jayway.restassured',	    name: 'rest-assured'
+
 }
