@@ -31,7 +31,9 @@ import static org.mockito.internal.verification.VerificationModeFactory.times;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-
+/**
+ * Created by MZouari on 18/01/2019.
+ */
 @RunWith(SpringRunner.class)
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
@@ -52,19 +54,17 @@ public class UserControllerTest {
 
     @BeforeClass
     public static void setUpBeforeClass(){
-        /**
-        * J'ai vu dans des exemples, je dois avoir ici mes MockMvcBuilders, standalonSetup(...)
-        * */
+
         adr = new Adresse("122 avenue du Général Leclerc","BOULOGNE BILLANCOURT","IDF","92100","FR");
         em = new Email("jean.dupont@yopmail.com", true);
-        emInvalid = new Email("aaaaaaaaaa",true);
-        usr = new User("majdi", "majdi","FR","1","Jean","Pierre","Dupont","Martin","1980-06-28", adr, em);
-        usrInvalid = new User("majdi", "majdi","FR","1","Jean","Pierre","Dupont","Martin","1980-06-28", adr, emInvalid);
+        emInvalid = new Email("mailvalue",true);
+        usr = new User("user1", "user1","FR","1","Jean","Pierre","Dupont","Martin","1980-06-28", adr, em);
+        usrInvalid = new User("user2", "user2","FR","1","Jean","Pierre","Dupont","Martin","1980-06-28", adr, emInvalid);
     }
 
     @Before
     public void setup() {
-        usr = new User("majdi", "majdi","FR","1","Jean","Pierre","Dupont","Martin","1980-06-28", adr, em);
+        usr = new User("user1", "user1","FR","1","Jean","Pierre","Dupont","Martin","1980-06-28", adr, em);
         id = "0000";
         usr.setId(id);
     }

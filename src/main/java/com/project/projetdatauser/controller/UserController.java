@@ -2,6 +2,7 @@ package com.project.projetdatauser.controller;
 
 import com.project.projetdatauser.model.User;
 import com.project.projetdatauser.services.UserService;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -55,7 +56,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/authentificate", method = RequestMethod.POST)
-    public  ResponseEntity <User> authentificate(@RequestParam String login, @RequestParam String pwd)  {
+    public  ResponseEntity <?> authentificate(@RequestParam String login, @RequestParam String pwd)  {
         User usr = userService.authentificate(login,pwd);
         if (usr == null) throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User Not Found To Authentificate");
         return new ResponseEntity<User>(usr, HttpStatus.OK);

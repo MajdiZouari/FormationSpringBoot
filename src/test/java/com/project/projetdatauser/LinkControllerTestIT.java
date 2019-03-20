@@ -26,7 +26,7 @@ import static org.hamcrest.Matchers.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
-public class LinkControllerTest {
+public class LinkControllerTestIT {
 
     @LocalServerPort
     private int port;
@@ -118,11 +118,6 @@ public class LinkControllerTest {
 
     @Test
     public void should_success_getAllLinksByUserId(){
-        /**
-         * Je dois pouvoir récupérer une liste de links que retourne mon Rest-assured
-         * Et ensuite examiner le contenu avec les assertThat de AssertJ
-         * Je n'ai pas encore trouvé la bonne syntaxe
-         */
         given()
                 .port(port)
         .when()
